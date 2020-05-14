@@ -43,9 +43,10 @@ class WeiBo(object):
         pre_login = json.loads(re.match(r'[^{]+({.+?})', resp.text).group(1))
         # Login
         resp = self.session.post('https://login.sina.com.cn/sso/login.php?client=%s' %
-                                 sso_login, data=WbUtils.getLoginStructure(self.logincode, self.password, pre_login)
+                                 sso_login, data=WbUtils.getLoginStructure(self.account, self.password, pre_login)
                                  )
         # CrossDomain
+
         crossdomain2 = re.search('(https://[^;]*)', resp.text).group(1)
         resp = self.session.get(crossdomain2)
         # Passport

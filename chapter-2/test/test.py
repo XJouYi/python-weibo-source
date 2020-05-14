@@ -5,5 +5,5 @@
 from SinaWeibo import WeiBo
 
 if __name__ == '__main__':
-    we = WeiBo('xxxx', 'xxxx')
+    we = WeiBo('morality.king@gmail.com', 'qwedsazxcvfrtgb')
     we.login()
