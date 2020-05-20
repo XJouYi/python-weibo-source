@@ -10,8 +10,8 @@ from .utils import WbUtils
 sso_login = 'ssologin.js(v1.4.19)'
 # 模拟客户端
 user_agent = (
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-    'Chrome/79.0.3945.130 Safari/537.36'
+    'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/536.11 (KHTML, like Gecko) '
+    'Chrome/20.0.1132.57 Safari/536.11'
 )
 
 
@@ -57,4 +57,23 @@ class WeiBo(object):
         login_info = json.loads(re.search('\((\{.*\})\)', resp.text).group(1))
         self.uid = login_info["userinfo"]["uniqueid"]
         print(self.uid)
+
+    def sendText(self, content):
+        curr_time = "%d" % (time.time() * 1000)
+        self.session.headers["Host"] = "weibo.com"
+        self.session.headers["Origin"] = "https://weibo.com"
+        referer = "https://www.weibo.com/u/%s/home?wvr=5" % self.uid
+        self.session.headers["Referer"] = referer
+        resp = self.session.post(
+            'https://weibo.com/aj/mblog/add?ajwvr=6&__rnd=%s' % curr_time, data=WbUtils.getTextStructure(content)
+        )
+        try:
+            json_object = json.loads(resp.content)
+            if json_object['code'] == '100000':
+                print("消息发送成功:%s" % content)
+            else:
+                print("消息发送失败:%s" % json_object['msg'])
+        except Exception as e:
+            print("消息发送失败:%s" % content)
+            raise e
 
